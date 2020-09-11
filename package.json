@@ -1,8 +1,8 @@
 {
   "name": "react-copy-clipboard",
-  "version": "1.0.4",
+  "version": "2.0.1",
   "description": "A react component based on js, Click to copy and mouseover will show tip",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",

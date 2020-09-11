@@ -29,15 +29,16 @@ class copyClipboard extends React.Component {
    * @node {Object} Node节点
    * @id {String} id
    * @text {String} 显示文本内容
+   * @suffix {String} 文本后缀 default:'单击复制'
    */
-  showToolTip = (node, id, text) => {
+  showToolTip = (node, id, text, suffix) => {
     const { offsetLeft, offsetTop } = this.state;
     const el = document.createElement('div');
     el.setAttribute('id', id);
     el.setAttribute('style', `left: ${offsetLeft}px;top:${offsetTop}px;`);
-    el.innerHTML = `<span>${text} <span style='color:darkgrey;font-size:12px'>(单击复制)</span></span>`;
+    el.innerHTML = `<span>${text} <span style='color:darkgrey;font-size:12px'>${suffix}</span></span>`;
     el.addEventListener('click', () => {
-      this.copyText()
+      this.copyText(text)
     })
     node.target.appendChild(el);
   }
@@ -63,25 +64,26 @@ class copyClipboard extends React.Component {
     el.setAttribute('value', text);
     document.body.appendChild(el);
     el.select();
-    const boolean = document.execCommand('Copy');
+    const boolean = document.execCommand('copy');
+    console.log(text);
     document.body.removeChild(el);
-    return boolean ? '复制成功' : '复制失败'
+    return boolean ? '√' : 'x'
   }
 
 
   render() {
-    const { text = '请参照文档使用', children = <span></span> } = this.props;
+    const { text = '', suffix = '', children = <span></span> } = this.props;
     return (
       <span
         ref={this.ref}
         className="copy-tooltip"
         onClick={(e) => {
-          const res = this.copyText(text);
+          const textTemp = this.copyText(text);
           this.removeToolTip(e, 'props-tooltip');
-          this.showToolTip(e, 'props-tooltip', res);
+          this.showToolTip(e, 'props-tooltip', textTemp, suffix);
         }}
         onMouseEnter={(e) => {
-          this.showToolTip(e, 'props-tooltip', text);
+          this.showToolTip(e, 'props-tooltip', text, suffix);
         }}
         onMouseLeave={(e) => {
           this.removeToolTip(e, 'props-tooltip');
